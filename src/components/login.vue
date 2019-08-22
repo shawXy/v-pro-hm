@@ -7,8 +7,11 @@
         <el-input v-model="loginForm.mobile" placeholder="请输入您的手机号"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="loginForm.code" placeholder="请输入验证码" style="width:335px;margin-right:10px"></el-input>
+        <el-input v-model="loginForm.code" placeholder="请输入验证码" style="width:286px;margin-right:10px"></el-input>
       <el-button>发送验证码</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-checkbox  :value="true">我已阅读并同意用户协议和隐私条款</el-checkbox>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%">登录</el-button>
@@ -39,8 +42,8 @@ export default {
   position: fixed;
   background: url('../assets/images/login_bg.jpg') center / cover;
   .card{
-    width: 500px;
-    height: 350px;
+    width: 450px;
+    height: 400px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -48,7 +51,7 @@ export default {
     img{
       display: block;
       width: auto;
-      margin: 20px auto 30px;
+      margin: 10px auto 30px;
     }
   }
 }
