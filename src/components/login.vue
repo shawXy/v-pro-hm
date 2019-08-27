@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import store from '@/store'
+// import { async } from 'q'
 export default {
   data () {
     const checkmobile = (rule, value, callback) => {
@@ -51,15 +53,29 @@ export default {
   },
   methods: {
     login () {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
-          this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
-            .then(res => {
-              this.$router.push('/')
-            })
-            .catch(() => {
-              this.$message.error('手机号或者验证码错误')
-            })
+          // 使用async await替换一下写法
+          // this.$http.post('/authorizations', this.loginForm)
+          //   .then(res => {
+          //     store.setUser(res.data.data)
+          //     this.$router.push('/')
+          //   })
+          //   .catch(() => {
+          //     this.$message.error('手机号或者验证码错误')
+          //   })
+          // await处理的是请求成功的结果。所以要加上捕获异常的try catch来处理失败结果
+          try {
+            // const res = await this.$http.post('/authorizations', this.loginForm)
+            // store.setUser(res.data.data)
+            // 可以使用解构赋值的方式写
+            const { data: { data } } = await this.$http.post('/authorizations', this.loginForm)
+            store.setUser(data)
+            this.$router.push('/')
+          } catch (e) {
+            this.$message.error('手机号或者验证码错误')
+          }
+
           // console.log(this.loginForm)
         }
       })
