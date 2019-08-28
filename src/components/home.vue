@@ -2,8 +2,9 @@
 <el-container class="home">
   <el-aside :width="isCollape?'64px':'200px'">
     <div class="mlogo" :class="{min_logo:isCollape}"></div>
+    <!-- this.$route获取路由数据，this.$router调用路由函数 -->
     <el-menu
-      default-active="/"
+      :default-active="$route.path"
       background-color="#002033"
       text-color="#fff"
       active-text-color="#ffd04b"
@@ -47,13 +48,14 @@
       <span class="h-text">江苏传智播客科技教育有限公司</span>
       <el-dropdown>
         <span class="el-dropdown-link">
-          <img src="../assets/images/avatar.jpg" alt="">
-          <span class="username">人渣反派</span>
+          <img :src="avatar" alt="">
+          <span class="username" >{{username}}</span>
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+          <!-- .native把原生事件绑定在组件上 -->
+        <el-dropdown-item icon="el-icon-setting" @click.native="setting()">个人设置</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-unlock" @click.native="loginOut()">退出登录</el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
     </el-header>
@@ -65,15 +67,31 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
+  created () {
+    const userinfo = store.getUser()
+    this.username = userinfo.name
+    this.avatar = userinfo.photo
+  },
   data () {
     return {
-      isCollape: false
+      isCollape: false,
+      username: '',
+      avatar: '',
+      test: []
     }
   },
   methods: {
     toggleMenu () {
       this.isCollape = !this.isCollape
+    },
+    setting () {
+      this.$router.push('/setting')
+    },
+    loginOut () {
+      store.delUser()
+      this.$router.push('/login')
     }
   }
 

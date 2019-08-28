@@ -6,9 +6,10 @@ import router from '@/router'
 import './styles/index.less'
 import axios from '@/api'
 import store from '@/store'
+import myPlugin from '@/components'
 
 Vue.prototype.$http = axios
-
+Vue.use(myPlugin)
 Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {

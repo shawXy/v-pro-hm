@@ -1,16 +1,27 @@
 import axios from 'axios'
 import store from '@/store'
-import router from '../router'
+
+import router from '@/router'
+import jonbig from 'json-bigint'
 
 // 配置axios默认地址
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
+
+// 覆盖axios默认对json数据的转换
+axios.defaults.transformResponse = [data => {
+  try {
+    return jonbig.parse(data)
+  } catch (e) {
+    return data
+  }
+}]
 
 // 将token存储在请求头中
 // axios.defaults.headers.Authorization = 'bearer' + store.getUser().token
 
 // 请求拦截器：在请求前将token添加到请求头中
 axios.interceptors.request.use(config => {
-  axios.defaults.headers.Authorization = 'Bearer' + store.getUser().token
+  config.headers.Authorization = 'Bearer ' + store.getUser().token
   return config
 }, err => {
   return Promise.reject(err)
@@ -21,10 +32,12 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(res => {
   return res
 }, err => {
-  // console.log(err)
   if (err.response.status === 401) {
     store.delUser()
+
     router.push('/login')
+
+    // location.hash = '#/login'
   }
   return Promise.reject(err)
 })
