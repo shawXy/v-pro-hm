@@ -15,14 +15,16 @@
           </el-radio-group>
       </el-form-item>
       <el-form-item label="频道：">
-        <el-select v-model="reqParams.channel_id" placeholder="请选择" clearable>
+        <my-channel v-model="reqParams.channel_id"></my-channel>
+        <!-- <el-select v-model="reqParams.channel_id" placeholder="请选择" clearable>
           <el-option
             v-for="item in channelOptions"
             :key="item.id"
             :label="item.name"
-            :value="item.id">
+            :value="item.id"
+            >
           </el-option>
-        </el-select>
+        </el-select> -->
       </el-form-item>
       <el-form-item label="日期：">
         <el-date-picker
@@ -76,7 +78,7 @@
         label="发布时间">
       </el-table-column>
       <el-table-column
-        label="操作">
+        label="操作" width="150">
         <template slot-scope="scope">
           <!-- {{scope.row.id}} -->
             <el-button type="primary" icon="el-icon-edit" @click="$router.push('/publish?id='+scope.row.id)" circle plain></el-button>
@@ -87,6 +89,7 @@
     <el-pagination
       background
       layout="prev, pager, next,total"
+      hide-on-single-page
       :page-size="reqParams.per_page"
       :current-page="reqParams.page"
       @current-change="changePage"
@@ -110,18 +113,13 @@ export default {
         page: 1,
         per_page: 20
       },
-      channelOptions: [],
+      // channelOptions: [],
       dateArr: [],
       total: 0,
       articles: []
     }
   },
   methods: {
-    // 获取下拉框中的所有频道
-    async getChannels () {
-      const { data: { data } } = await this.$http.get('/channels')
-      this.channelOptions = data.channels
-    },
     // 获取文章列表
     async getArticles () {
       const { data: { data } } = await this.$http.get('/articles', { params: this.reqParams })
@@ -171,7 +169,6 @@ export default {
     }
   },
   created () {
-    this.getChannels()
     this.getArticles()
   }
 }
