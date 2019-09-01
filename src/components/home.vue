@@ -68,11 +68,18 @@
 
 <script>
 import store from '@/store'
+import eventBus from '@/components/eventBus'
 export default {
   created () {
     const userinfo = store.getUser()
     this.username = userinfo.name
     this.avatar = userinfo.photo
+    eventBus.$on('updateName', (name) => {
+      this.username = name
+    })
+    eventBus.$on('updateAvatar', (photo) => {
+      this.avatar = photo
+    })
   },
   data () {
     return {
