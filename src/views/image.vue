@@ -79,7 +79,7 @@ export default {
       this.getImages()
     },
     changeTab () {
-      this.page = 1
+      this.reqparams.page = 1
       this.getImages()
     },
     async isCollect (item) {
